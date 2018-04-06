@@ -43,9 +43,14 @@ public class HomePage extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        //set profile picture in navigation drawer
-        /*ImageView profile_pic=findViewById(R.id.profilePic);
 
+        //set username on navigation drawer
+        Bundle bundle=getIntent().getExtras();
+        TextView textView=navigationView.getHeaderView(0).findViewById(R.id.uid_nav);
+        textView.setText(bundle.getString("username"));
+
+        //set profile picture in navigation drawer
+        /*ImageView profile_pic=navigationView.getHeaderView(0).findViewById(R.id.profilePic);
         String profile_url="https://www.rajagiritech.ac.in/stud/Photo/"+ bundle.getString("username")+".jpg";
         try{
             URL url = new URL(profile_url);
@@ -56,7 +61,6 @@ public class HomePage extends AppCompatActivity
         }catch(IOException ex){
             ex.printStackTrace();
         }*/
-        //end of setting profile picture in navigation drawer
     }
 
     @Override
@@ -97,20 +101,23 @@ public class HomePage extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.dashboard) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.attendance) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.scores) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.seating_plan) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.notice) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.settings) {
+
+        } else if (id == R.id.about_developer) {
+
+        } else if (id == R.id.logout) {
 
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

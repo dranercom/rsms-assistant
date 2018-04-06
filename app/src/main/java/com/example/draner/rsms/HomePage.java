@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -50,17 +52,16 @@ public class HomePage extends AppCompatActivity
         textView.setText(bundle.getString("username"));
 
         //set profile picture in navigation drawer
-        /*ImageView profile_pic=navigationView.getHeaderView(0).findViewById(R.id.profilePic);
-        String profile_url="https://www.rajagiritech.ac.in/stud/Photo/"+ bundle.getString("username")+".jpg";
-        try{
-            URL url = new URL(profile_url);
-            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            profile_pic.setImageBitmap(bmp);
-        }catch(MalformedURLException ex){
-            ex.printStackTrace();
-        }catch(IOException ex){
-            ex.printStackTrace();
-        }*/
+        View header = navigationView.getHeaderView(0);
+        ImageView imageView = (ImageView) header.findViewById(R.id.profilePic);
+        String profilepic_url="https://www.rajagiritech.ac.in/stud/Photo/"+bundle.getString("username")+".jpg";
+
+        Glide
+                .with(this)
+                .load(profilepic_url)
+                .placeholder(R.drawable.ic_person_outline_black_24dp)
+                .error(R.drawable.ic_person_outline_black_24dp)
+                .into(imageView);
     }
 
     @Override
@@ -72,29 +73,6 @@ public class HomePage extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home_page, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

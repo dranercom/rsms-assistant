@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <ImageView
+        android:id="@+id/rset_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="78dp"
+        android:src="@drawable/logo"/>
+    <TextView
+        android:id="@+id/login_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rset_logo"
+        android:text="@string/login"
+        android:textSize="24dp"
+        android:textColor="#187605"/>
+    <TextView
+        android:id="@+id/uid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_header"
+        android:text="@string/uid"
+        android:layout_marginTop="20sp" />
+    <EditText
+        android:id="@+id/uid_form"
+        android:layout_width="200sp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_header"
+        android:layout_toRightOf="@+id/uid"
+        android:layout_marginLeft="60sp"
+        android:inputType="text"/>
+    <TextView
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/uid"
+        android:layout_marginTop="40sp"
+        android:text="@string/password" />
+    <EditText
+        android:id="@+id/password_form"
+        android:layout_width="200sp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/uid_form"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/password"
+        android:layout_marginLeft="20sp"
+        android:inputType="numberPassword"/>
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/password_form"
+        android:layout_marginTop="30sp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/login"/>
+    <TextView
+        android:id="@+id/credential_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_button"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>

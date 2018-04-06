@@ -20,8 +20,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         EditText password_form=findViewById(R.id.password_form);
         String uname=uid_form.getText().toString();
         String pword=password_form.getText().toString();
-        Intent intent=new Intent(getApplicationContext(),home_page.class);
-        intent.putExtra("userame",uname);
+        Intent intent=new Intent(getApplicationContext(),HomePage.class);
+        intent.putExtra("username",uname);
         intent.putExtra("password",pword);
         startActivity(intent);
         setContentView(R.layout.activity_home_page);

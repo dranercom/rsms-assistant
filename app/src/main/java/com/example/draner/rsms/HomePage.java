@@ -141,7 +141,7 @@ public class HomePage extends AppCompatActivity
     @Override
 
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -161,7 +161,15 @@ public class HomePage extends AppCompatActivity
         } else if (id == R.id.scores) {
 
         } else if (id == R.id.seating_plan) {
-            
+            //MainActivity obj=new MainActivity();
+            //String pdf_uid = obj.sp.getString("username",null);
+            Intent intent=new Intent(getApplicationContext(),SeatingArrangement.class);
+            startActivity(intent);
+            //WebView pdfView=findViewById(R.id.pdfView);
+            //pdfView.getSettings().setJavaScriptEnabled(true);
+            //String pdf_url="https://www.rajagiritech.ac.in/stud/parent/Seat/"+pdf_uid.substring(1)+".pdf";*/
+            //pdfView.loadUrl("https://www.rajagiritech.ac.in/stud/parent/Seat/1403102.pdf");
+
 
         } else if (id == R.id.notice) {
 

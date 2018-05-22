@@ -17,13 +17,18 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import static com.example.draner.rsms.MainActivity.editor;
 
 public class HomePage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
     ProgressDialog dashboard_loading;
     String homepage_url="https://www.rajagiritech.ac.in/stud/parent/varify.asp";
+    String username,password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +48,10 @@ public class HomePage extends AppCompatActivity
 
         //set username on navigation drawer
         Bundle bundle=getIntent().getExtras();
+        username=bundle.getString("username");
+        password=bundle.getString("password");
         TextView textView=navigationView.getHeaderView(0).findViewById(R.id.uid_nav);
-        textView.setText(bundle.getString("username"));
+        textView.setText(username);
 
         //set profile picture in navigation drawer
         View header = navigationView.getHeaderView(0);
@@ -58,6 +65,8 @@ public class HomePage extends AppCompatActivity
                 .into(imageView);
         new LoadDashBoard().execute();
     }
+
+    //dashboard details processing
     private class LoadDashBoard extends AsyncTask<Void,Void,Void>{
         String title;
         @Override
@@ -74,12 +83,16 @@ public class HomePage extends AppCompatActivity
             try{
                 Document document=Jsoup.connect(homepage_url)
                                     .header("Content-Type", "application/x-www-form-urlencoded")
-                                    .data("user","u1403102")
-                                    .data("pass","5775")
+                                    .data("user",username)
+                                    .data("pass",password)
                                     .data("I1.x","0")
                                     .data("I2.y","0")
                                     .post();
-                title=document.title();
+                Element table=document.select("TABLE").get(0);
+                Elements rows=table.select("TR");
+                Element row = rows.get(0);
+                Elements cols = row.select("TD");
+                title=cols.get(0).text();
             }catch(IOException ae){
                 ae.printStackTrace();
             }
@@ -92,6 +105,7 @@ public class HomePage extends AppCompatActivity
             dashboard_loading.dismiss();
         }
     }
+    //end of dashboard details processing
 
     @Override
     public void onBackPressed() {
@@ -115,15 +129,6 @@ public class HomePage extends AppCompatActivity
         } else if (id == R.id.scores) {
 
         } else if (id == R.id.seating_plan) {
-            //MainActivity obj=new MainActivity();
-            //String pdf_uid = obj.sp.getString("username",null);
-            Intent intent=new Intent(getApplicationContext(),SeatingArrangement.class);
-            startActivity(intent);
-            //WebView pdfView=findViewById(R.id.pdfView);
-            //pdfView.getSettings().setJavaScriptEnabled(true);
-            //String pdf_url="https://www.rajagiritech.ac.in/stud/parent/Seat/"+pdf_uid.substring(1)+".pdf";*/
-            //pdfView.loadUrl("https://www.rajagiritech.ac.in/stud/parent/Seat/1403102.pdf");
-
 
         } else if (id == R.id.notice) {
 

@@ -1,11 +1,10 @@
 package com.example.draner.rsms;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -20,18 +19,19 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EncodingUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -39,6 +39,8 @@ import static com.example.draner.rsms.MainActivity.editor;
 
 public class HomePage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    ProgressDialog dashboard_loading;
+    String homepage_url="https://www.rajagiritech.ac.in/stud/parent/varify.asp";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,75 +73,44 @@ public class HomePage extends AppCompatActivity
                 .placeholder(R.drawable.ic_person_outline_black_24dp)
                 .error(R.drawable.ic_person_outline_black_24dp)
                 .into(imageView);
-        //load rsms to dashboard
-        String data="user="+bundle.getString("username")+"&pass="+bundle.getString("password")+"&I1.x=0&I2.y=0";
-        WebView webView = findViewById(R.id.webview);
-        WebViewClient wvc = new WebViewClient() {
-            @Override
-            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-
-                try {
-                    DefaultHttpClient client = new DefaultHttpClient();
-                    HttpGet httpGet = new HttpGet(url);
-                    httpGet.setHeader("Content-Type", "application/x-www-form-urlencoded");
-                    HttpResponse httpResponse = client.execute(httpGet);
-
-                    Header contentType = httpResponse.getEntity().getContentType();
-                    Header encoding = httpResponse.getEntity().getContentEncoding();
-                    InputStream responseInputStream = httpResponse.getEntity().getContent();
-
-                    String contentTypeValue = null;
-                    String encodingValue = null;
-                    if (contentType != null) {
-                        contentTypeValue = contentType.getValue();
-                    }
-                    if (encoding != null) {
-                        encodingValue = encoding.getValue();
-                    }
-                    return new WebResourceResponse(contentTypeValue, encodingValue, responseInputStream);
-                } catch (ClientProtocolException e) {
-                    //return null to tell WebView we failed to fetch it WebView should try again.
-                    return null;
-                } catch (IOException e) {
-                    //return null to tell WebView we failed to fetch it WebView should try again.
-                    return null;
-                }
-            }
-        };
-        webView.setWebViewClient(wvc);
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient());
-
-        //To go back to the previous page when back button is pressed
-        webView.setOnKeyListener(new View.OnKeyListener()
-        {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event)
-            {
-                if(event.getAction() == KeyEvent.ACTION_DOWN)
-                {
-                    WebView webView = (WebView) v;
-
-                    switch(keyCode)
-                    {
-                        case KeyEvent.KEYCODE_BACK:
-                            if(webView.canGoBack())
-                            {
-                                webView.goBack();
-                                return true;
-                            }
-                            break;
-                    }
-                }
-
-                return false;
-            }
-        });
-        webView.postUrl("https://www.rajagiritech.ac.in/stud/parent/varify.asp", EncodingUtils.getBytes(data,"BASE64"));
+        new LoadDashBoard().execute();
     }
-    @Override
+    private class LoadDashBoard extends AsyncTask<Void,Void,Void>{
+        String title;
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            dashboard_loading=new ProgressDialog(HomePage.this);
+            dashboard_loading.setTitle("Student Dashboard");
+            dashboard_loading.setMessage("Loading..!");
+            dashboard_loading.setIndeterminate(false);
+            dashboard_loading.show();
+        }
+        @Override
+        protected Void doInBackground(Void...params){
+            try{
+                Document document=Jsoup.connect(homepage_url)
+                                    .header("Content-Type", "application/x-www-form-urlencoded")
+                                    .data("user","u1403102")
+                                    .data("pass","5775")
+                                    .data("I1.x","0")
+                                    .data("I2.y","0")
+                                    .post();
+                title=document.title();
+            }catch(IOException ae){
+                ae.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result){
+            TextView dash_title = findViewById(R.id.dasboard_title);
+            dash_title.setText(title);
+            dashboard_loading.dismiss();
+        }
+    }
 
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -155,7 +126,7 @@ public class HomePage extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.dashboard) {
-            // Handle the camera action
+
         } else if (id == R.id.attendance) {
 
         } else if (id == R.id.scores) {
